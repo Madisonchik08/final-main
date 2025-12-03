@@ -11,9 +11,7 @@ type ParcelStore struct {
 func NewParcelStore(db *sql.DB) ParcelStore {
 	store := ParcelStore{db: db}
 	// Автоматически создаем таблицу при инициализации
-	if err := store.initTable(); err != nil {
-		panic("failed to initialize database table: " + err.Error())
-	}
+	_ = store.initTable()
 	return store
 }
 
@@ -69,9 +67,7 @@ func (s ParcelStore) GetByClient(client int) ([]Parcel, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer func() {
-		_ = rows.Close()
-	}()
+	defer rows.Close()
 
 	var res []Parcel
 	for rows.Next() {
