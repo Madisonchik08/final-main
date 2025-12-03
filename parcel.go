@@ -11,7 +11,9 @@ type ParcelStore struct {
 func NewParcelStore(db *sql.DB) ParcelStore {
 	store := ParcelStore{db: db}
 	// Автоматически создаем таблицу при инициализации
-	_ = store.initTable()
+	if err := store.initTable(); err != nil {
+		panic("failed to initialize database table: " + err.Error())
+	}
 	return store
 }
 
