@@ -8,6 +8,9 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+// Version информация о версии приложения
+const Version = "1.0.0"
+
 const (
 	ParcelStatusRegistered = "registered"
 	ParcelStatusSent       = "sent"
