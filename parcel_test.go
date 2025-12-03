@@ -35,7 +35,7 @@ func TestAddGetDelete(t *testing.T) {
 	if err != nil {
 		require.NoError(t, err)
 	}
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 	store := NewParcelStore(db)
 	parcel := getTestParcel()
 
@@ -52,9 +52,9 @@ func TestAddGetDelete(t *testing.T) {
 	require.Equal(t, parcel, stored)
 
 	// delete
-	err = store.Delete(parcel.Number)
+	require.NoError(t, store.Delete(parcel.Number))
 
-	stored, err = store.Get(parcel.Number)
+	_, err = store.Get(parcel.Number)
 	require.Equal(t, sql.ErrNoRows, err)
 }
 
@@ -65,7 +65,7 @@ func TestSetAddress(t *testing.T) {
 	if err != nil {
 		require.NoError(t, err)
 	}
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 	store := NewParcelStore(db)
 	parcel := getTestParcel()
 
@@ -95,7 +95,7 @@ func TestSetStatus(t *testing.T) {
 	if err != nil {
 		require.NoError(t, err)
 	}
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 	store := NewParcelStore(db)
 	parcel := getTestParcel()
 
@@ -124,7 +124,7 @@ func TestGetByClient(t *testing.T) {
 	if err != nil {
 		require.NoError(t, err)
 	}
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 	store := NewParcelStore(db)
 
 	parcels := []Parcel{
@@ -142,9 +142,9 @@ func TestGetByClient(t *testing.T) {
 
 	// add
 	for i := 0; i < len(parcels); i++ {
-		id, err := store.Add(parcels[i])
+		id, addErr := store.Add(parcels[i])
 
-		require.NoError(t, err)
+		require.NoError(t, addErr)
 		require.NotEmpty(t, id)
 
 		parcels[i].Number = id
