@@ -9,7 +9,25 @@ type ParcelStore struct {
 }
 
 func NewParcelStore(db *sql.DB) ParcelStore {
-	return ParcelStore{db: db}
+	store := ParcelStore{db: db}
+	// Автоматически создаем таблицу при инициализации
+	_ = store.initTable()
+	return store
+}
+
+// initTable создает таблицу parcel, если она не существует
+func (s ParcelStore) initTable() error {
+	query := `
+	CREATE TABLE IF NOT EXISTS parcel (
+		number INTEGER PRIMARY KEY AUTOINCREMENT,
+		client INTEGER NOT NULL,
+		status TEXT NOT NULL,
+		address TEXT NOT NULL,
+		created_at TEXT NOT NULL
+	)`
+
+	_, err := s.db.Exec(query)
+	return err
 }
 
 func (s ParcelStore) Add(p Parcel) (int, error) {

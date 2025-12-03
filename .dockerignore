@@ -1,6 +1,27 @@
+# Git
 .git
 .gitignore
+.github
+
+# Database files
+*.db
+tracker.db
+
+# Go test files
+*_test.go
+coverage.out
+
+# Documentation
+*.md
 README.md
-go.mod
-go.sum
-*.test
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
